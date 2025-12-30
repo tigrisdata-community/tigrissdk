@@ -111,18 +111,38 @@ func WithCompareAndSwap() func(*s3.Options) {
 	return WithHeader("X-Tigris-CAS", "true")
 }
 
+// WithEnableSnapshot tells Tigris to enable bucket snapshotting when creating buckets.
+//
+// See the Tigris documentation[1] for more information.
+//
+// [1]: https://www.tigrisdata.com/docs/buckets/snapshots-and-forks/#enabling-snapshots-and-forks
 func WithEnableSnapshot() func(*s3.Options) {
 	return WithHeader("X-Tigris-Enable-Snapshot", "true")
 }
 
+// WithTakeSnapshot tells Tigris to create a snapshot with the given description on a forkable bucket.
+//
+// See the Tigris documentation[1] for more information.
+//
+// [1]: https://www.tigrisdata.com/docs/buckets/snapshots-and-forks/#creating-a-snapshot
 func WithTakeSnapshot(desc string) func(*s3.Options) {
 	return WithHeader("X-Tigris-Snapshot", fmt.Sprintf("true; desc=%s", desc))
 }
 
+// WithSnapshotVersion tells Tigris to use a given snapshot when doing ListObjectsV2, GetObject, or HeadObject calls.
+//
+// See the Tigris documentation[1] for more information.
+//
+// [1]: https://www.tigrisdata.com/docs/buckets/snapshots-and-forks/#listing-and-retrieving-objects-from-a-snapshot
 func WithSnapshotVersion(snapshotVersion string) func(*s3.Options) {
 	return WithHeader("X-Tigris-Snapshot-Version", snapshotVersion)
 }
 
+// WithRename tells Tigris to do an in-place rename of objects instead of copying them when using a CopyObject call.
+//
+// See the Tigris documentation[1] for more information.
+//
+// [1]: https://www.tigrisdata.com/docs/objects/object-rename/#renaming-objects-using-aws-sdks
 func WithRename() func(*s3.Options) {
 	return func(options *s3.Options) {
 		options.APIOptions = append(options.APIOptions, http.AddHeaderValue("X-Tigris-Rename", "true"))
